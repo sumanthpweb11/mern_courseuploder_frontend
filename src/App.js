@@ -9,6 +9,7 @@ import Courses from './components/Courses/Courses';
 import Home from './components/Home/Home';
 import Footer from './components/Layout/Footer/Footer';
 import Header from './components/Layout/Header/Header';
+import Request from './components/Request/Request';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/courses" element={<Courses />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/request" element={<Request />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/forgotpassword" element={<ForgotPassword />} />
