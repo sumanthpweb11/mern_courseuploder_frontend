@@ -43,16 +43,15 @@
     width: 100%;
   }
 
-  .text-font{
+  .text-font {
     font-size: 20px !important;
   }
 
-  .vector-graphics{
+  .vector-graphics {
     width: 200px !important;
     height: 200px !important;
   }
 }
-
 
 .course {
   width: 250px;
