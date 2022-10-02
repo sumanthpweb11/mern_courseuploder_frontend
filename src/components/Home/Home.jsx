@@ -2,6 +2,7 @@ import React from 'react';
 import {
   Box,
   Button,
+  Grid,
   Heading,
   HStack,
   Image,
@@ -20,43 +21,53 @@ import introVideo from '../../assests/videos/intro.mp4';
 const Home = () => {
   return (
     <section className="home">
-      <div className="container">
-        <Stack
+      <Grid
+        minH={'90vh'}
+        templateColumns={['1fr', '3fr 1fr']}
+        justifyContent={['center', 'space-evenly']}
+        alignItems="center"
+        spacing={['15', '56']}
+        p={'8'}
+      >
+        {/* <Stack
           direction={['column', 'row']}
           height="100%"
           justifyContent={['center', 'space-between']}
           alignItems="center"
           spacing={['16', '56']}
+        > */}
+        <VStack
+          width={'full'}
+          alignItems={['center', 'flex-start']}
+          spacing="8"
         >
-          <VStack
-            width={'full'}
-            alignItems={['center', 'flex-start']}
-            spacing="8"
-          >
-            <Heading
-              children="LEARN FROM THE EXPERTS"
-              size={'2xl'}
-              className="text-font"
-            />
-            <Text
-              fontSize={'2xl'}
-              fontFamily="cursive"
-              textAlign={['center', 'left']}
-              children="Find Valuable Content At Reasonable Price"
-            />
-            <Link to="/courses">
-              <Button size={'lg'}>Explore Now</Button>
-            </Link>
-          </VStack>
+          <Heading
+            children="LEARN FROM THE EXPERTS"
+            size={'2xl'}
+            className="text-font"
+          />
+          <Text
+            fontSize={'2xl'}
+            fontFamily="cursive"
+            textAlign={['center', 'left']}
+            children="Find Valuable Content At Reasonable Price"
+          />
+          <Link to="/courses">
+            <Button size={'lg'}>Explore Now</Button>
+          </Link>
+        </VStack>
 
+        <HStack alignItems={'center'} justifyContent="center">
           <Image
             className="vector-graphics"
             boxSize={'md'}
             src={vg}
             objectFit="contain"
           />
-        </Stack>
-      </div>
+        </HStack>
+
+        {/* </Stack> */}
+      </Grid>
 
       <Box padding={'8'} bg="blackAlpha.800">
         <Heading

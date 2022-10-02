@@ -24,7 +24,7 @@ const LinkButton = ({ url = '/', title = 'Home', onClose }) => {
 const Header = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const isAuthenticated = false;
+  const isAuthenticated = true;
 
   const logoutHandler = () => {
     console.log('logout');
@@ -38,6 +38,7 @@ const Header = () => {
     <>
       <ColorModeSwitcher />
       <Button
+        zIndex={'overlay'}
         onClick={onOpen}
         width="12"
         height="12"
