@@ -5,41 +5,32 @@ import {
   Heading,
   HStack,
   Image,
+  Input,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
   Stack,
   Text,
   useDisclosure,
   useRadio,
   VStack,
 } from '@chakra-ui/react';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useState } from 'react';
+import toast from 'react-hot-toast';
 import { RiDeleteBin7Fill } from 'react-icons/ri';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import ChangePhotoModal from '../ChakraComponents/ChangePhotoModal';
+import { updateProfilePicture } from '../../redux/actions/profile';
+import { loadUser } from '../../redux/actions/user';
 
-const Profile = () => {
-  const user = {
-    name: 'Sumanth',
-    email: 'sumanthpweb11@gmial.com',
-    createdAt: String(new Date().toISOString()),
-    role: 'user',
-    subscription: {
-      status: undefined,
-    },
-    playlist: [
-      {
-        course: 'course id',
-        poster:
-          'https://cdn.pixabay.com/photo/2016/11/13/04/52/statistic-1820320_960_720.png',
-      },
-      {
-        course: 'course id',
-        poster:
-          'https://cdn.pixabay.com/photo/2016/11/13/04/52/statistic-1820320_960_720.png',
-      },
-    ],
-  };
+import { fileUploadCss } from '../Auth/Register';
 
+const Profile = ({ user }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [image, setImage] = useState('');
   const [ImagePrev, setImagePrev] = useState('');
@@ -60,9 +51,28 @@ const Profile = () => {
     };
   };
 
-  const changeImageSubmitHandler = (e, image) => {
+  const dispatch = useDispatch();
+  const { loading, message, error } = useSelector(state => state.profile);
+  const changeImageSubmitHandler = async (e, image) => {
     e.preventDefault();
+    const myForm = new FormData();
+
+    myForm.append('file', image);
+
+    await dispatch(updateProfilePicture(myForm));
+    dispatch(loadUser());
   };
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+      dispatch({ type: 'clearError' });
+    }
+    if (message) {
+      toast.success(message);
+      dispatch({ type: 'clearMessage' });
+    }
+  }, [dispatch, error, message]);
 
   const modalCloseHandler = () => {
     onClose();
@@ -81,7 +91,7 @@ const Profile = () => {
         p="8"
       >
         <VStack>
-          <Avatar boxSize={'48'} />
+          <Avatar boxSize={'48'} src={user.avatar.url} />
           <Button onClick={onOpen} variant={'ghost'}>
             Change Photo
           </Button>
@@ -105,7 +115,7 @@ const Profile = () => {
           {user.role !== 'admin' && (
             <HStack>
               <Text children="Subscription" fontWeight={'bold'} />
-              {user.subscription.status === 'active' ? (
+              {user.subscription && user.subscription.status === 'active' ? (
                 <Button>Cancel Subscription</Button>
               ) : (
                 <Link to="/subscribe">
@@ -164,7 +174,7 @@ const Profile = () => {
         </Stack>
       )}
 
-      <ChangePhotoModal
+      <ChangePhotoBox
         changeImage={changeImage}
         isOpen={isOpen}
         onClose={onClose}
@@ -174,9 +184,77 @@ const Profile = () => {
         ImagePrev={ImagePrev}
         setImagePrev={setImagePrev}
         modalCloseHandler={modalCloseHandler}
+        loading={loading}
       />
     </Container>
   );
 };
 
 export default Profile;
+
+function ChangePhotoBox({
+  isOpen,
+  onClose,
+  changeImageSubmitHandler,
+  loading,
+}) {
+  const [image, setImage] = useState('');
+  const [imagePrev, setImagePrev] = useState('');
+
+  const changeImage = e => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+
+    reader.readAsDataURL(file);
+
+    reader.onloadend = () => {
+      setImagePrev(reader.result);
+      setImage(file);
+    };
+  };
+
+  const closeHandler = () => {
+    onClose();
+    setImagePrev('');
+    setImage('');
+  };
+  return (
+    <Modal isOpen={isOpen} onClose={closeHandler}>
+      <ModalOverlay backdropFilter={'blur(10px)'} />
+      <ModalContent>
+        <ModalHeader>Change Photo</ModalHeader>
+        <ModalCloseButton />
+        <ModalBody>
+          <Container>
+            <form onSubmit={e => changeImageSubmitHandler(e, image)}>
+              <VStack spacing={'8'}>
+                {imagePrev && <Avatar src={imagePrev} boxSize={'48'} />}
+
+                <Input
+                  type={'file'}
+                  css={{ '&::file-selector-button': fileUploadCss }}
+                  onChange={changeImage}
+                />
+
+                <Button
+                  Loading={loading}
+                  w="full"
+                  colorScheme={'yellow'}
+                  type="submit"
+                >
+                  Change
+                </Button>
+              </VStack>
+            </form>
+          </Container>
+        </ModalBody>
+
+        <ModalFooter>
+          <Button mr="3" onClick={closeHandler}>
+            Cancel
+          </Button>
+        </ModalFooter>
+      </ModalContent>
+    </Modal>
+  );
+}

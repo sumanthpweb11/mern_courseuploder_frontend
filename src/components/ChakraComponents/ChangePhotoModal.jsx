@@ -25,6 +25,7 @@ const ChangePhotoModal = ({
   ImagePrev,
   modalCloseHandler,
   setImagePrev,
+  isloading,
 }) => {
   return (
     <>
@@ -44,7 +45,7 @@ const ChangePhotoModal = ({
                     onChange={changeImage}
                   />
 
-                  <Button w={'full'} type="submit">
+                  <Button isloading w={'full'} type="submit">
                     Change
                   </Button>
                 </VStack>
