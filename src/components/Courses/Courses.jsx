@@ -12,6 +12,7 @@ import { useState } from 'react';
 import CourseCard from './CourseCard';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllCourses } from '../../redux/actions/course';
+import { addToPlaylist } from '../../redux/actions/profile';
 import toast from 'react-hot-toast';
 import { loadUser } from '../../redux/actions/user';
 
@@ -48,7 +49,10 @@ const Courses = () => {
     }
   }, [category, keyword, dispatch, error, message]);
 
-  const addToPlaylistHandler = courseId => {};
+  const addToPlaylistHandler = async courseId => {
+    await dispatch(addToPlaylist(courseId));
+    dispatch(loadUser());
+  };
   return (
     <Container minH={'95vh'} maxW="container.lg" paddingY={'8'}>
       <Heading children="All Courses" m={'8'} />
@@ -93,6 +97,7 @@ const Courses = () => {
                 creator={item.createdBy}
                 lectureCount={item.numOfVideos}
                 addToPlaylistHandler={addToPlaylistHandler}
+                loading={loading}
               />
             );
           })

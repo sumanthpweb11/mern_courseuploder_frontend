@@ -19,6 +19,7 @@ const CourseCard = ({
   creator,
   description,
   lectureCount,
+  loading,
 }) => {
   return (
     <VStack className="course" alignItems={['center', 'flex-start']}>
@@ -63,6 +64,7 @@ const CourseCard = ({
         </Link>
 
         <Button
+          // isLoading={loading}
           onClick={() => addToPlaylistHandler(id)}
           variant={'ghost'}
           colorScheme={'yellow'}
