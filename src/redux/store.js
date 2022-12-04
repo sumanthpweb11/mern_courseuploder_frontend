@@ -2,6 +2,8 @@ import { configureStore } from '@reduxjs/toolkit';
 import { courseReducer } from './reducers/courseReducer';
 import { profileReducer, userReducer } from './reducers/userReducer';
 
+export const server = 'https://mern-sub-api.onrender.com/api/v1';
+
 const store = configureStore({
   reducer: {
     user: userReducer,
@@ -11,5 +13,3 @@ const store = configureStore({
 });
 
 export default store;
-
-export const server = 'https://mern-sub-api.onrender.com/api/v1';
