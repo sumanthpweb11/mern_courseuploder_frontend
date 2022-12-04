@@ -25,7 +25,10 @@ import toast from 'react-hot-toast';
 import { RiDeleteBin7Fill } from 'react-icons/ri';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { updateProfilePicture } from '../../redux/actions/profile';
+import {
+  removeFromPlaylist,
+  updateProfilePicture,
+} from '../../redux/actions/profile';
 import { loadUser } from '../../redux/actions/user';
 
 import { fileUploadCss } from '../Auth/Register';
@@ -34,10 +37,6 @@ const Profile = ({ user }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [image, setImage] = useState('');
   const [ImagePrev, setImagePrev] = useState('');
-
-  const removeFromPlaylistHandler = id => {
-    console.log(id);
-  };
 
   const changeImage = e => {
     const file = e.target.files[0];
@@ -53,6 +52,13 @@ const Profile = ({ user }) => {
 
   const dispatch = useDispatch();
   const { loading, message, error } = useSelector(state => state.profile);
+
+  const removeFromPlaylistHandler = async id => {
+    // console.log(id);
+    await dispatch(removeFromPlaylist(id));
+    dispatch(loadUser());
+  };
+
   const changeImageSubmitHandler = async (e, image) => {
     e.preventDefault();
     const myForm = new FormData();
@@ -162,6 +168,7 @@ const Profile = ({ user }) => {
                   </Link>
 
                   <Button
+                    isLoading={loading}
                     borderRadius={'2'}
                     onClick={() => removeFromPlaylistHandler(element.course)}
                   >
